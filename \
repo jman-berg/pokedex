@@ -1,0 +1,16 @@
+package main
+
+type cliCommand struct {
+	name		string
+	description	string
+	callback	func() error
+}
+
+
+cliCommands := map[string]cliCommand{
+	"exit": {
+		name:		"exit", 
+		description:	"Exits the Pokedex",
+		callback:	commandExit,
+	},
+}
