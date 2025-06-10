@@ -8,12 +8,16 @@ import (
 	"strings"
 
 	"github.com/jman-berg/pokedex/internal/pokeapi"
+	"github.com/jman-berg/pokedex/internal/pokecache"
 )
 
 type Config struct{
 	pokeapiClient pokeapi.Client
+	pokeCache *pokecache.Cache
 	previous string
 	next string
+	parameter *string
+	pokedex map[string]pokeapi.Pokemon
 }
 
 func startRepl(config *Config) {
@@ -29,6 +33,11 @@ func startRepl(config *Config) {
 		}
 
 		command := cleanedInput[0]
+
+		if len(cleanedInput) == 2 {
+			config.parameter = &cleanedInput[1]
+		}
+			
 
 		cmd, exists := getCommands()[command]
 		if !exists {
@@ -74,6 +83,26 @@ func getCommands() map[string]cliCommand {
 		name:		"mapb", 
 		description:	"Displays the names of the previous 20 location areas",
 		callback:	commandMapB,
+		},
+		"explore": {
+		name:		"explore", 
+		description:	"Lists all the pokemon of a location",
+		callback:	commandExplore,
+		},
+		"catch": {
+		name:		"catch", 
+		description:	"Catches a given Pokémon and adds it to the user's Pokedex",
+		callback:	commandCatch,
+		},
+		"inspect": {
+		name:		"inspect", 
+		description:	"See details of a Pokemon you caught",
+		callback:	commandInspect,
+		},
+		"pokedex": {
+		name:		"pokedex", 
+		description:	"See a list of Pokemon you caught",
+		callback:	commandPokedex,
 		},
 
 	}
